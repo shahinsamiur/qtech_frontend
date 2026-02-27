@@ -75,7 +75,7 @@ const Header: React.FC = () => {
 
       <div
         ref={menuRef}
-        className="md:hidden overflow-hidden bg-white shadow-md py-3"
+        className="md:hidden overflow-hidden bg-white shadow-md "
         style={{ height: 0 }}
       >
         <nav className="flex flex-col space-y-4 px-6 py-4">

@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #4640de;
+  --secondary: #202430;
   --text-primary: #25324b;
   --text-secondary: #26a4ff;
   --text-neutrals: #515b6f;
@@ -11,6 +12,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-secondary: var(--secondary);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-neutrals: var(--text-neutrals);
@@ -25,6 +27,7 @@
     --text-primary: #25324b;
     --text-secondary: #26a4ff;
     --text-neutrals: #515b6f;
+    --secondary: #202430;
   }
 }
 
@@ -45,7 +48,7 @@ section {
   }
 
   p {
-    @apply text-base leading-relaxed 
+    @apply text-sm leading-relaxed 
            md:text-lg 
            lg:text-lg;
   }
@@ -88,5 +91,5 @@ section {
 }
 
 a {
-  @apply text-text-neutrals hover:text-text-neutrals/50 transition duration-300;
+  @apply text-text-neutrals hover:text-text-neutrals/50 transition duration-300 text-sm;
 }
