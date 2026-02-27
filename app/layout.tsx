@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Epilogue } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import Header from "../components/header";
+import Footer from "../components/footer";
 const EpilogueFont = Epilogue({
   variable: "--font-EpilogueFont",
   subsets: ["latin"],
@@ -38,7 +40,9 @@ export default function RootLayout({
       <body
         className={`${EpilogueFont.variable} ${myFont.variable} antialiased`}
       >
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
