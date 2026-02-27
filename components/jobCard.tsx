@@ -42,13 +42,13 @@ const JobCard: React.FC<JobCardProps> = ({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-blue-600 font-semibold text-md">
+              <span className="text-foreground font-semibold text-md">
                 {company.charAt(0)}
               </span>
             )}
           </div>
 
-          <span className="text-sm font-medium text-blue-600 border border-blue-500 px-3 py-1 ">
+          <span className="text-sm font-medium text-foreground border border-blue-500 px-3 py-1 ">
             {type}
           </span>
         </div>
