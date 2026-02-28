@@ -1,149 +1,57 @@
 "use client";
 
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import JobCard from "@/components/adminJobCard";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+  type: string;
+  categories: string[];
+}
+export default function Hero() {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
 
-const PostJobPage = () => {
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      company: "",
-      location: "",
-      category: "",
-      description: "",
-    },
-
-    validationSchema: Yup.object({
-      title: Yup.string().required("Job title is required"),
-      company: Yup.string().required("Company name is required"),
-      location: Yup.string().required("Location is required"),
-      category: Yup.string().required("Category is required"),
-      description: Yup.string().required("Job description is required"),
-    }),
-    onSubmit: async (values, { resetForm }) => {
+  useEffect(() => {
+    const fetchJobs = async () => {
       try {
-        await axios.post("https://qtec-backend-fawn.vercel.app/api/jobs/", {
-          title: values.title.trim(),
-          company: values.company.trim(),
-          location: values.location.trim(),
-          category: values.category.trim(), // ✅ lowercase
-          description: values.description.trim(),
-        });
-
-        alert("Job posted successfully!");
-        resetForm();
-      } catch (error: any) {
-        console.error("Failed to post job:", error.response?.data || error);
-        alert(
-          error.response?.data?.message ||
-            "Something went wrong. Please try again.",
+        const response = await axios.get(
+          "https://qtec-backend-fawn.vercel.app/api/jobs/",
         );
+        setJobs(response.data.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
       }
-    },
-  });
+    };
+
+    fetchJobs();
+  }, []);
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-sm p-8 mt-12 rounded-md">
-      <h1 className="text-2xl font-semibold mb-6">Post a New Job</h1>
-
-      <form onSubmit={formik.handleSubmit} className="space-y-5">
-        {/* Job Title */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Job Title *
-          </label>
-          <input
-            type="text"
-            {...formik.getFieldProps("title")}
-            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter job title"
-          />
-          {formik.touched.title && formik.errors.title && (
-            <p className="text-red-500 text-sm mt-1">{formik.errors.title}</p>
-          )}
+    <div className="w-full min-h-screen text-red-500 py-20 max-sm:pt-30">
+      <section>
+        <div className="w-full flex flex-wrap md:space-x-4 space-y-4 justify-center md:justify-start items-center">
+          {jobs?.map((item, index) => (
+            <JobCard
+              key={index}
+              id={item.id}
+              title={item.title}
+              company={item.company}
+              location={item.location}
+              description={item.description}
+              type="Full Time"
+              categories={["Marketing", "Design"]}
+            />
+          ))}
         </div>
-
-        {/* Company */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Company *
-          </label>
-          <input
-            type="text"
-            {...formik.getFieldProps("company")}
-            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter company name"
-          />
-          {formik.touched.company && formik.errors.company && (
-            <p className="text-red-500 text-sm mt-1">{formik.errors.company}</p>
-          )}
-        </div>
-
-        {/* Location */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Location *
-          </label>
-          <input
-            type="text"
-            {...formik.getFieldProps("location")}
-            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter job location"
-          />
-          {formik.touched.location && formik.errors.location && (
-            <p className="text-red-500 text-sm mt-1">
-              {formik.errors.location}
-            </p>
-          )}
-        </div>
-
-        {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Category *
-          </label>
-          <input
-            type="text"
-            {...formik.getFieldProps("category")}
-            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="e.g. Design, Marketing"
-          />
-          {formik.touched.category && formik.errors.category && (
-            <p className="text-red-500 text-sm mt-1">
-              {formik.errors.category}
-            </p>
-          )}
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Description *
-          </label>
-          <textarea
-            rows={5}
-            {...formik.getFieldProps("description")}
-            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter job description"
-          />
-          {formik.touched.description && formik.errors.description && (
-            <p className="text-red-500 text-sm mt-1">
-              {formik.errors.description}
-            </p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-foreground text-white font-medium py-3 rounded-md hover:bg-blue-700 transition"
-        >
-          Post Job
-        </button>
-      </form>
+      </section>
     </div>
   );
-};
-
-export default PostJobPage;
+}
