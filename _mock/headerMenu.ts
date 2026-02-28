@@ -5,7 +5,7 @@ export const headerMenu: MenuItemType[] = [
   },
   {
     name: "Browse Companies",
-    href: "/about",
+    href: "#",
   },
 ];
 

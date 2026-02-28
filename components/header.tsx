@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { headerMenu as Menu, MenuItemType } from "@/_mock/headerMenu";
 import Image from "next/image";
 import Button from "@/Utilities/button";
+import Link from "next/link";
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -58,10 +59,15 @@ const Header: React.FC = () => {
             </nav>
           </div>
           <div className="w-1/2  md:flex justify-end items-center gap-5 hidden ">
-            <Button className="bg-background! text-foreground border-r border-text-neutrals/20">
-              Login
-            </Button>
-            <Button>Sign Up</Button>
+            <Link href="/postJob">
+              <Button className="bg-background! text-foreground border-r border-text-neutrals/20">
+                Post Jobs
+              </Button>
+            </Link>
+
+            <Link href="/admin">
+              <Button>Admin Panel</Button>
+            </Link>
           </div>
 
           <button
