@@ -1,26 +1,54 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import JobHeader from "@/components/JobDescriptionHeader";
 import ApplyForm from "@/components/ApplyForm";
 
-interface PageProps {
-  params: { id: string };
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+  type: string;
+  categories: string[];
 }
 
-export default function JobDetailsPage({}: PageProps) {
-  // Dummy data (replace with API call later)
-  const job = {
-    title: "Product Designer",
-    company: "ClassPass",
-    location: "Manchester, UK",
-    type: "Full Time",
-    description:
-      "ClassPass is looking for a Product Designer to help us build meaningful user experiences.\n\nResponsibilities:\n- Work with product team\n- Design intuitive interfaces\n- Conduct user research",
-    categories: ["Design", "Marketing"],
-  };
+export default function JobDetailsPage() {
+  const params = useParams();
+  const id = params?.id as string;
+
+  const [job, setJob] = useState<Job | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchJob = async () => {
+      try {
+        const response = await axios.get(
+          `https://qtec-backend-fawn.vercel.app/api/jobs/${id}`,
+        );
+        setJob(response.data.data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJob();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!job) return <p>Job not found</p>;
 
   return (
     <section className="flex flex-col md:flex-row gap-5 pt-20 lg:pt-24 pb-10 px-4 justify-between">
       <JobHeader {...job} />
-      <ApplyForm />
+      <ApplyForm jobId={id} />
     </section>
   );
 }

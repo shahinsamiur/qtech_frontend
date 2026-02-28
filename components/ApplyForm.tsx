@@ -3,14 +3,19 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
-const ApplyForm = () => {
+interface ApplyFormProps {
+  jobId: string;
+}
+
+const ApplyForm = ({ jobId }: ApplyFormProps) => {
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
-      resume: "",
-      coverNote: "",
+      resume_link: "",
+      cover_note: "",
     },
 
     validationSchema: Yup.object({
@@ -22,20 +27,32 @@ const ApplyForm = () => {
         .email("Invalid email format")
         .required("Email is required"),
 
-      resume: Yup.string()
+      resume_link: Yup.string()
         .url("Enter a valid URL")
         .required("Resume link is required"),
 
-      coverNote: Yup.string().max(
+      cover_note: Yup.string().max(
         300,
         "Cover note must be under 300 characters",
       ),
     }),
 
-    onSubmit: (values, { resetForm }) => {
-      console.log("Application Submitted:", values);
-      alert("Application submitted successfully!");
-      resetForm();
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await axios.post(
+          "https://qtec-backend-fawn.vercel.app/api/applications/",
+          {
+            ...values,
+            job_id: jobId, // ✅ sending job id
+          },
+        );
+
+        alert("Application submitted successfully!");
+        resetForm();
+      } catch (error) {
+        console.error("Submission failed:", error);
+        alert("Something went wrong. Please try again.");
+      }
     },
   });
 
@@ -53,7 +70,6 @@ const ApplyForm = () => {
           </label>
           <input
             type="text"
-            // name="names"
             {...formik.getFieldProps("name")}
             className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your name"
@@ -70,7 +86,6 @@ const ApplyForm = () => {
           </label>
           <input
             type="email"
-            // name="email"
             {...formik.getFieldProps("email")}
             className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email"
@@ -87,13 +102,14 @@ const ApplyForm = () => {
           </label>
           <input
             type="url"
-            // name="resume"
-            {...formik.getFieldProps("resume")}
+            {...formik.getFieldProps("resume_link")}
             className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://your-resume-link.com"
           />
-          {formik.touched.resume && formik.errors.resume && (
-            <p className="text-red-500 text-sm mt-1">{formik.errors.resume}</p>
+          {formik.touched.resume_link && formik.errors.resume_link && (
+            <p className="text-red-500 text-sm mt-1">
+              {formik.errors.resume_link}
+            </p>
           )}
         </div>
 
@@ -103,15 +119,14 @@ const ApplyForm = () => {
             Cover Note
           </label>
           <textarea
-            // name="coverNote"
             rows={4}
-            {...formik.getFieldProps("coverNote")}
+            {...formik.getFieldProps("cover_note")}
             className="w-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Write something about yourself..."
           />
-          {formik.touched.coverNote && formik.errors.coverNote && (
+          {formik.touched.cover_note && formik.errors.cover_note && (
             <p className="text-red-500 text-sm mt-1">
-              {formik.errors.coverNote}
+              {formik.errors.cover_note}
             </p>
           )}
         </div>

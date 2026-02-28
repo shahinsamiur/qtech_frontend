@@ -15,6 +15,7 @@ export interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({
+  id,
   title,
   company,
   location,
@@ -22,12 +23,10 @@ const JobCard: React.FC<JobCardProps> = ({
   type,
   categories,
   logoUrl,
-  //   onClick,
 }) => {
   return (
     <Link
-      href={`/job/`}
-      //   onClick={onClick}
+      href={`/jobs/${id}`}
       className="bg-white w-full md:w-[45%]  lg:w-[23.5%] space-y-4 shadow-sm border border-[#D6DDEB] p-4 px-6 hover:shadow-sm transition duration-300 cursor-pointer"
     >
       <div className="flex items-start  justify-between">
@@ -48,7 +47,7 @@ const JobCard: React.FC<JobCardProps> = ({
             )}
           </div>
 
-          <span className="text-sm font-medium text-foreground border border-blue-500 px-3 py-1 ">
+          <span className="text-sm font-medium text-foreground border border-foreground px-3 py-1 ">
             {type}
           </span>
         </div>

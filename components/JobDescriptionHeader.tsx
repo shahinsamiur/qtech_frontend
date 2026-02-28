@@ -51,7 +51,7 @@ const JobHeader: React.FC<JobDetailsProps> = ({
 
         {/* Job Type */}
         <span className="text-sm font-medium text-foreground border border-foreground px-4 py-2  w-fit">
-          {type}
+          {type || "Full Time"}
         </span>
       </div>
 
@@ -67,7 +67,7 @@ const JobHeader: React.FC<JobDetailsProps> = ({
 
       {/* Categories */}
       <div className="mt-6 flex gap-3 flex-wrap">
-        {categories.map((cat, index) => (
+        {categories?.map((cat, index) => (
           <span
             key={index}
             className={`text-sm px-4 py-1 rounded-full font-medium ${
