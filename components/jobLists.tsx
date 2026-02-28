@@ -15,7 +15,7 @@ interface Job {
 export default function Hero() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState("");
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -25,7 +25,6 @@ export default function Hero() {
         setJobs(response.data.data);
         console.log(response.data);
       } catch (err) {
-        // setError("Failed to fetch jobs");
         console.log(err);
       } finally {
         setLoading(false);
